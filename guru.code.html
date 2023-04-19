@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>String Comparison</title>
+</head>
+<body>
+	<h1>String Comparison</h1>
+	<label for="num_strings">Enter the number of strings to compare (maximum 5):</label>
+	<input type="number" id="num_strings" min="2" max="5">
+	<button onclick="getInput()">Submit</button>
+
+	<div id="input_window" style="display: none;">
+		<h2>Input Values</h2>
+		<ul id="input_list"></ul>
+		<label for="compare_type">Select whether to compare by vowels or consonants:</label>
+		<select id="compare_type">
+			<option value="vowels">Vowels</option>
+			<option value="consonants">Consonants</option>
+		</select>
+		<button onclick="compareStrings()">Compare</button>
+	</div>
+
+	<div id="output_window" style="display: none;">
+		<h2>Comparison Results</h2>
+		<p id="output_message"></p>
+	</div>
+
+	<script>
+		function getInput() {
+			var num_strings = document.getElementById("num_strings").value;
+			if (num_strings < 2) {
+				alert("Please enter at least 2 strings.");
+				return;
+			}
+			if (num_strings > 5) {
+				alert("Please enter no more than 5 strings.");
+				return;
+			}
+			var input_list = document.getElementById("input_list");
+			input_list.innerHTML = "";
+			for (var i = 1; i <= num_strings; i++) {
+				var input = "";
+				while (true) {
+					input = prompt("Enter string " + i + " :");
+					if (input === null || input === "") {
+						alert("Please enter a valid string.");
+						continue;
+					}
+					if (/[^a-zA-Z]/.test(input)) {
+						alert("Input should only contain alphabetic characters.");
+						continue;
+					}
+					break;
+				}
+				input_list.innerHTML += "<li>" + input + "</li>";
+			}
+			document.getElementById("input_window").style.display = "block";
+		}
+
+		function compareStrings() {
+			var compare_type = document.getElementById("compare_type").value;
+			var inputs = document.getElementsByTagName("li");
+			var message = "";
+			for (var i = 0; i < inputs.length; i++) {
+				var input = inputs[i].innerHTML;
+				message += "<p>String #" + (i+1) + ": " + input + "</p>";
+				var count = 0;
+				for (var j = 0; j < input.length; j++) {
+					if (compare_type === "vowels" && isVowel(input[j])) {
+						count++;
+					} else if (compare_type === "consonants" && isConsonant(input[j])) {
+						count++;
+					}
+				}
+				message += "<p>Number of " + compare_type + ": " + count + "</p>";
+			}
+			document.getElementById("output_message").innerHTML = message;
+			document.getElementById("output_window").style.display = "block";
+		}
+
+		function isVowel(char) {
+			return /[aeiou]/i.test(char);
+		}
+
+		function isConsonant(char) {
+			return /[bcdfghjklmnpqrstvwxyz]/i.test(char);
+		}
+	</script>
+</body>
+</html>
